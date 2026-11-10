@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Sitong Chen">
+<meta property="og:description" content="Research assistant at the Computational Robotics Lab, ETH Zürich: humanoid loco-manipulation, VLM planning and reinforcement learning.">
+<meta property="og:url" content="https://sc0k.github.io/">
+<meta property="og:image" content="https://sc0k.github.io/images/kino-teaser.jpg">
+<title>Sitong Chen</title>
+<meta name="description" content="Sitong Chen, research assistant at the Computational Robotics Lab, ETH Zürich: humanoid loco-manipulation, VLM planning and reinforcement learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+/* Layout: a DOS text-mode screen. Gray menu bar on top, one 80-column session below where every section is the output of a command, a live prompt at the end, and a status line pinned to the bottom. Deliberately single-theme (CRT black). */
+:root{
+  color-scheme:dark;
+  --bg:#000000; --fg:#c0c0c0; --hi:#ffffff; --dim:#808080;
+  --cyan:#55ffff; --yellow:#ffff55; --green:#55ff55; --red:#ff5555; --blue:#0000aa; --bar:#aaaaaa;
+  --f-dos:"VT323","Lucida Console","Courier New",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font:22px/1.22 var(--f-dos);margin:0;
+  text-shadow:0 0 1px rgba(255,255,255,.35),0 0 7px rgba(192,192,192,.18);padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bar)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;
+  background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.22) 2px 3px),
+             radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.45) 100%)}
+a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
+a:hover,a:focus-visible{background:var(--cyan);color:var(--bg);text-decoration:none;text-shadow:none;outline:none}
+button{font:inherit}
+::selection{background:var(--fg);color:var(--bg)}
+
+/* menu bar, like a text-mode editor */
+.menubar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar);color:#000;text-shadow:none;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.menubar .in{max-width:1000px;margin:0 auto;display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+.menubar .in::-webkit-scrollbar{display:none}
+.menubar .logo{padding:2px 10px 2px 0;font-weight:normal}
+.menubar a{color:#000;text-decoration:none;padding:2px 10px}
+.menubar a b{color:var(--red);font-weight:normal}
+.menubar a:hover,.menubar a:focus-visible{background:#000;color:var(--bar)}
+.menubar a:hover b,.menubar a:focus-visible b{color:var(--red)}
+
+.screen{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 28px}
+.term{max-width:1000px;margin:0 auto}
+.post{white-space:pre-wrap;color:var(--fg);margin:0 0 6px}
+.post .ok{color:var(--hi)}
+.cmd{margin-top:26px;color:var(--hi);white-space:pre-wrap;word-break:break-word}
+.pr{color:var(--fg)}
+.out{margin-top:8px;min-width:0}
+.out p{margin:0 0 10px;max-width:74ch}
+.dim{color:var(--dim)} .hi{color:var(--hi)} .y{color:var(--yellow)} .c{color:var(--cyan)} .g{color:var(--green)}
+section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 44px)}
+section.flash .cmd{animation:flash .9s steps(2) 2}
+@keyframes flash{50%{background:var(--fg);color:var(--bg)}}
+
+/* windows: double border like a text-mode dialog */
+.win{border:4px double var(--fg);position:relative;padding:18px 16px 14px;margin-top:14px}
+.win > .ttl{position:absolute;top:-14px;left:14px;background:var(--bg);color:var(--hi);padding:0 6px;line-height:1.1}
+.about{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+.pix{width:300px;max-width:100%;height:auto;image-rendering:pixelated;display:block}
+.tags{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:6px}
+.tags span{background:var(--blue);color:var(--hi);padding:0 8px}
+
+.listing{white-space:pre-wrap;margin:0}
+.pub{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start}
+.pub video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#111;filter:saturate(.85) contrast(1.05)}
+.pub h3{font:inherit;color:var(--yellow);margin:0}
+.btns{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px}
+.btns a{text-decoration:none;color:var(--hi)}
+.btns a::before{content:"< ";color:var(--fg)}
+.btns a::after{content:" >";color:var(--fg)}
+.btns a:hover::before,.btns a:hover::after,.btns a:focus-visible::before,.btns a:focus-visible::after{color:var(--bg)}
+
+.log{display:grid;gap:18px}
+.entry .when{color:var(--green)}
+.entry h3{font:inherit;color:var(--yellow);margin:0}
+.entry .where{color:var(--cyan)}
+.entry ul{list-style:none;margin:4px 0 0;padding:0}
+.entry li{padding-left:2ch;text-indent:-2ch;max-width:76ch}
+.entry li::before{content:"- ";color:var(--dim)}
+.badge{background:var(--fg);color:var(--bg);text-shadow:none;padding:0 6px;margin-left:6px}
+
+.dir{display:grid;grid-template-columns:9ch 7ch 20ch minmax(0,1fr);gap:0 12px}
+.cfg div{padding-left:0}
+.cfg .k{color:var(--hi)}
+
+/* prompt */
+.promptline{display:flex;align-items:baseline;gap:0;margin-top:26px;cursor:text}
+.promptline label{color:var(--fg);white-space:nowrap}
+#cli{flex:1;min-width:0;background:transparent;border:0;outline:none;color:var(--hi);font:inherit;text-shadow:inherit;caret-color:transparent;padding:0 0 0 1ch;text-transform:uppercase}
+.caret{display:inline-block;width:.6em;height:.18em;background:var(--hi);vertical-align:-.05em;animation:blink 1s steps(1) infinite;margin-left:-.1ch}
+@keyframes blink{50%{opacity:0}}
+#reply{white-space:pre-wrap}
+#reply .err{color:var(--fg)}
+.hint{color:var(--dim);margin-top:4px}
+
+/* status line */
+.status{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--cyan);color:#000;text-shadow:none;
+  padding:2px max(16px,env(safe-area-inset-right,0px)) calc(2px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.status .in{max-width:1000px;margin:0 auto;display:flex;gap:18px;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+.status .in::-webkit-scrollbar{display:none}
+.status button{all:unset;cursor:pointer}
+.status b{font-weight:normal;color:var(--blue)}
+.status .clock{margin-left:auto}
+.status button:hover,.status button:focus-visible{background:#000;color:var(--cyan)}
+
+@media (max-width:720px){
+  body{font-size:19px}
+  .about,.pub{grid-template-columns:minmax(0,1fr)}
+  .pix{width:100%}
+  .dir{grid-template-columns:8ch minmax(0,1fr)}
+  .dir .sz{display:none}
+  .dir .d{grid-column:2}
+  .dir .n{grid-column:1}
+  .dir .t{grid-column:1 / -1;margin-bottom:8px;padding-left:2ch}
+  .status .opt{display:none}
+}
+@media (prefers-reduced-motion:reduce){.caret,section.flash .cmd{animation:none}}
+
+/* homepage structure: intro, news table, numbered publications, projects, footer */
+.intro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:26px;align-items:start;margin-top:22px}
+.banner{font-size:64px;line-height:.9;color:var(--hi);margin:0;letter-spacing:.02em;font-weight:normal}
+.banner small{display:block;font-size:22px;line-height:1.2;color:var(--dim);margin-top:8px;letter-spacing:0}
+.hello{color:var(--yellow);margin:16px 0 8px}
+.sub{color:var(--cyan);margin:18px 0 4px}
+.news{display:grid;grid-template-columns:12ch minmax(0,1fr);gap:8px 16px}
+.news .d{color:var(--green);white-space:nowrap}
+.kind{display:inline-block;min-width:8ch;color:var(--bg);text-shadow:none;padding:0 6px;margin-right:8px;text-align:center}
+.k-paper{background:var(--yellow)} .k-start{background:var(--cyan)} .k-award{background:var(--green)} .k-lab{background:var(--fg)}
+.publist{display:grid;gap:22px;margin-top:10px}
+.pubrow{display:grid;grid-template-columns:4ch minmax(0,260px) minmax(0,1fr);gap:16px;align-items:start}
+.pubrow .no{color:var(--dim)}
+.pubrow video{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#111;border:4px double var(--fg)}
+.pubrow h3{font:inherit;color:var(--yellow);margin:0}
+.pubrow .venue{color:var(--fg);font-style:italic}
+.btns button{all:unset;cursor:pointer;color:var(--hi)}
+.btns button::before{content:"< ";color:var(--fg)}
+.btns button::after{content:" >";color:var(--fg)}
+.btns button:hover,.btns button:focus-visible{background:var(--cyan);color:var(--bg);text-shadow:none}
+.btns button[aria-expanded="true"]{background:var(--fg);color:var(--bg);text-shadow:none}
+.abs{margin-top:10px;border-left:4px double var(--dim);padding-left:12px;max-width:74ch}
+.projgrid{display:grid;gap:12px}
+.proj{display:grid;grid-template-columns:20ch minmax(0,1fr);gap:16px}
+.proj .d{color:var(--green)}
+.proj b{color:var(--yellow);font-weight:normal}
+.proj span{color:var(--dim)}
+section ~ section{border-top:4px double var(--dim);margin-top:30px}
+section ~ section > .cmd:first-child{margin-top:22px}
+#reply{border-top:4px double var(--dim);margin-top:30px;padding-top:0}
+#reply:empty{border-top:0;margin-top:0}
+#reply:empty + .promptline{border-top:4px double var(--dim);margin-top:30px;padding-top:22px}
+.foot{margin-top:34px;border-top:4px double var(--dim);padding-top:14px}
+.foot .links{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0}
+@media (max-width:720px){
+  .intro{grid-template-columns:minmax(0,1fr)}
+  .banner{font-size:46px}
+  .news{grid-template-columns:minmax(0,1fr);gap:2px}
+  .news .t{margin-bottom:10px}
+  .pubrow{grid-template-columns:minmax(0,1fr)}
+  .pubrow .no{display:none}
+  .proj{grid-template-columns:minmax(0,1fr);gap:0}
+}
+</style>
+</head>
+<body>
+
+<nav class="menubar" aria-label="Sections"><div class="in">
+  <span class="logo">SITONG.EXE</span>
+  <a href="#about"><b>A</b>bout</a><a href="#news"><b>N</b>ews</a><a href="#pubs"><b>P</b>ublications</a><a href="#projects">Pro<b>j</b>ects</a><a href="#contact"><b>C</b>ontact</a>
+</div></nav>
+
+<div class="screen"><main class="term" id="term">
+
+<div class="post" id="post">SC-BIOS (C) 2026  Release 26.11
+Memory Test    : 640K <span class="ok">OK</span>
+Detecting degrees ...
+  BA : OXFORD     2021-2024   <span class="ok">OK</span>
+  MSC: ETH-ZURICH 2024-2026   <span class="ok">OK</span>
+Starting SC-DOS...</div>
+
+<section id="about">
+  <div class="cmd"><span class="pr">C:\SITONG&gt;</span>TYPE README.TXT</div>
+  <div class="out intro">
+    <div class="win"><span class="ttl">SITONG.PCX</span><img class="pix" src="images/sitong-1bit.png" width="200" height="200" alt="Portrait of Sitong Chen, dithered in black and white"></div>
+    <div>
+      <h1 class="banner">SITONG CHEN<small>陈思同</small></h1>
+      <p class="hello">Hello there!</p>
+      <p>I'm a research assistant at the <a href="https://crl.ethz.ch/" target="_blank" rel="noopener">Computational Robotics Lab (CRL)</a>, <span class="c">ETH Zürich</span>, working with Prof. Stelian Coros. I did my MSc in Robotics, Systems and Control at <span class="c">ETH Zürich</span> and my BA in Engineering Science at the <span class="c">University of Oxford</span>.</p>
+      <div class="sub">- research</div>
+      <p>I work on humanoid robots that understand a task and move their whole body to do it. My work connects vision-language-model planning with reinforcement-learning whole-body control through motion keyframes. I'm also interested in model predictive control, motion planning and learning from human motion.</p>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="cmd"><span class="pr">C:\SITONG&gt;</span>TYPE NEWS.TXT</div>
+  <div class="out news">
+    <span class="d">2026-09</span><span class="t"><span class="kind k-paper">PAPER</span><a href="https://sc0k.github.io/kino/" target="_blank" rel="noopener">KINO</a> is out on <a href="https://arxiv.org/abs/2609.18869" target="_blank" rel="noopener">arXiv</a>: VLM planning meets whole-body control through keyframes.</span>
+    <span class="d">2026-08</span><span class="t"><span class="kind k-start">START</span>Started as a research assistant at the <a href="https://crl.ethz.ch/" target="_blank" rel="noopener">Computational Robotics Lab (CRL)</a>, ETH Zürich.</span>
+    <span class="d">2025-10</span><span class="t"><span class="kind k-start">START</span>Started my master's thesis on keyframe control for humanoid loco-manipulation at the <a href="https://crl.ethz.ch/" target="_blank" rel="noopener">Computational Robotics Lab (CRL)</a> with Prof. Stelian Coros.</span>
+    <span class="d">2025-04</span><span class="t"><span class="kind k-lab">PROJECT</span>Started working on ADMM-based distributed MPC for modular aerial robots at ETH.</span>
+    <span class="d">2025-03</span><span class="t"><span class="kind k-lab">LAB</span>Joined the <a href="https://rsl.ethz.ch/" target="_blank" rel="noopener">Robotic Systems Lab</a> (Prof. Marco Hutter) to work on coverage planning for legged robots.</span>
+    <span class="d">2024-09</span><span class="t"><span class="kind k-start">START</span>Started my MSc in Robotics, Systems and Control at ETH Zürich.</span>
+    <span class="d">2024-09</span><span class="t"><span class="kind k-award">AWARD</span>Graduated from Oxford with First Class Honours and received the College Examination Prize.</span>
+    <span class="d">2023-03</span><span class="t"><span class="kind k-award">AWARD</span>Received the EUROP Award at Oxford, one of 20 students out of 350.</span>
+  </div>
+</section>
+
+<section id="pubs">
+  <div class="cmd"><span class="pr">C:\SITONG&gt;</span>DIR PUBS</div>
+  <div class="out publist">
+    <div class="pubrow">
+      <div class="no">01</div>
+      <video src="images/kino-teaser.mp4" poster="images/kino-teaser.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Unitree G1 humanoid picking up and carrying a bucket"></video>
+      <div>
+        <h3>KINO: A Keyframe Interface for VLM Planning and Whole-Body Control in Humanoid Loco-Manipulation</h3>
+        <div><span class="hi">Sitong Chen</span>, Fatemeh Zargarbashi, Jin Cheng, Tianxu An, Stelian Coros</div>
+        <div class="venue">arXiv preprint, 2026</div>
+        <div class="btns"><button type="button" aria-expanded="false" aria-controls="abs1" data-abs="abs1">Abs</button><a href="https://arxiv.org/abs/2609.18869" target="_blank" rel="noopener">arXiv</a><a href="https://arxiv.org/pdf/2609.18869" target="_blank" rel="noopener">PDF</a><a href="https://sc0k.github.io/kino/" target="_blank" rel="noopener">Website</a></div>
+        <p class="abs" id="abs1" hidden>Humanoid loco-manipulation requires robots to interpret task instructions and scene semantics while executing coordinated whole-body motions. We propose a hierarchical framework that uses motion keyframes as an intermediate representation between Vision-Language Model (VLM) planning and Reinforcement Learning (RL) control. Each keyframe specifies a target whole-body robot pose and, when applicable, an object pose. Given a language instruction, scene observations, and execution feedback, the VLM selects successive task-relevant keyframes from a predefined library. The selected keyframes are retargeted to the current scene to account for object poses and dimensions. A keyframe-conditioned whole-body policy then generates joint-level actions to reach these goals. We introduce a saliency-based keyframe sampling strategy for low-level policy training that improves end-to-end task success rate from 44% to 92% when using sparse VLM keyframes. We evaluate our framework on object pickup, transport, and placement tasks in simulation and on a Unitree G1 humanoid. The system successfully performs both one- and two-handed manipulation and generalises to placement locations beyond the training reference data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="cmd"><span class="pr">C:\SITONG&gt;</span>DIR PROJECTS</div>
+  <div class="out projgrid">
+    <div class="proj"><span class="d">2025 · ETH</span><div><b>Distributed MPC for modular aerial robots</b> <span>· ADMM-based, with parallel module computation and rigid-connection constraints</span></div></div>
+    <div class="proj"><span class="d">2025 · ETH RSL</span><div><b>Coverage planning in multi-storey buildings</b> <span>· for legged robots inspecting construction sites</span></div></div>
+    <div class="proj"><span class="d">2024 · ETH SRL</span><div><b>Bionic robotic hand with haptic feedback</b> <span>· tendon-driven, 17 DoF, teleoperation and imitation learning on a Franka arm</span></div></div>
+    <div class="proj"><span class="d">2024 · Oxford</span><div><b>Scenario-based MPC and safety filters</b> <span>· multi-agent quadrotors and a Husarion robot</span></div></div>
+    <div class="proj"><span class="d">2024 · Oxford</span><div><b>Autonomous home-cleaning robot</b> <span>· navigation, grasping, deep Q-learning and movement primitives</span></div></div>
+    <div class="proj"><span class="d">2023 · Oxford</span><div><b>Core body temperature from heart rate</b> <span>· extended Kalman filter, with Equivital</span></div></div>
+    <div class="proj"><span class="d">2022 · Oxford</span><div><b>Chess-playing robot arm</b> <span>· ROS, MoveIt, YOLO and AprilTags, 15-person team</span></div></div>
+  </div>
+</section>
+
+<div id="reply" aria-live="polite"></div>
+<div class="promptline" id="promptline">
+  <label for="cli">C:\SITONG&gt;</label><input id="cli" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Type a command, for example HELP"><span class="caret" id="caret" aria-hidden="true"></span>
+</div>
+<div class="hint">Type HELP and press Enter.</div>
+
+<footer class="foot" id="contact">
+  <div>Feel free to email me at <span class="hi" id="email">sitongchen1@outlook.com</span> <button id="copy" type="button" style="all:unset;cursor:pointer;color:var(--cyan)">[COPY]</button></div>
+  <div class="links">
+    <a href="https://github.com/SC0K" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/sitong-chen-4b7300336/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://sc0k.github.io/kino/" target="_blank" rel="noopener">KINO</a>
+  </div>
+  <div class="dim">© 2026 Sitong Chen. Last updated: November 2026.</div>
+</footer>
+
+</main></div>
+
+<div class="status" role="contentinfo"><div class="in">
+  <button type="button" id="f1"><b>F1</b>=Help</button>
+  <span>C:\SITONG</span>
+  <span class="opt">ETH ZURICH</span>
+  <span class="clock" id="clock">--:--:--</span>
+</div></div>
+
+<script>
+(function(){
+  var cli=document.getElementById('cli'),reply=document.getElementById('reply');
+  var hist=[],hi=0;
+  var sections={ABOUT:'about',README:'about',NEWS:'news',PUBS:'pubs',PUBLICATIONS:'pubs',KINO:'pubs',PROJECTS:'projects',CONTACT:'contact'};
+  var files={'README.TXT':'about','NEWS.TXT':'news','PUBS':'pubs','PROJECTS':'projects'};
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+  function print(cmd,html){reply.insertAdjacentHTML('beforeend','<div class="cmd"><span class="pr">C:\\SITONG&gt;</span>'+esc(cmd)+'</div>'+(html?'<div class="out">'+html+'</div>':''));}
+  function show(id){
+    document.querySelectorAll('section').forEach(function(s){s.hidden=false});document.getElementById('post').hidden=false;
+    var el=document.getElementById(id);el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+    el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  }
+  function run(raw){
+    var line=raw.trim();if(!line){print('','');return}
+    var up=line.toUpperCase(),parts=up.split(/\s+/),c=parts[0],arg=parts.slice(1).join(' ');
+    if(c==='TYPE'||c==='CD'||c==='OPEN'){var f=files[arg]||sections[arg.replace(/\..*$/,'')];
+      if(f){print(line,'');show(f);}else print(line,'File not found');return}
+    if(sections[c]){print(line,'');show(sections[c]);return}
+    switch(c){
+      case 'HELP':case '?':print(line,
+'Commands:\n  <span class="hi">ABOUT</span>      who I am         <span class="hi">NEWS</span>       latest news\n  <span class="hi">PUBS</span>       publications     <span class="hi">PROJECTS</span>   projects\n  <span class="hi">CONTACT</span>    get in touch     <span class="hi">DIR</span>        list files\n  <span class="hi">VER</span>        version          <span class="hi">CLS</span>        clear screen');break;
+      case 'DIR':print(line,' Volume in drive C is SITONG\n Directory of C:\\SITONG\n\n'+Object.keys(files).map(function(f){var p=f.split('.');return (p[0]+'         ').slice(0,9)+(p[1]?p[1]:'&lt;DIR&gt;')}).join('\n')+'\n        '+Object.keys(files).length+' file(s)');break;
+      case 'VER':print(line,'SC-DOS Version 26.11');break;
+      case 'DATE':case 'TIME':print(line,'Current '+(c==='DATE'?'date':'time')+' is '+(c==='DATE'?new Date().toLocaleDateString('en-GB'):new Date().toLocaleTimeString('en-GB')));break;
+      case 'CLS':reply.innerHTML='';document.querySelectorAll('section').forEach(function(s){s.hidden=true});document.getElementById('post').hidden=true;window.scrollTo(0,0);break;
+      case 'LINKEDIN':print(line,'<a href="https://www.linkedin.com/in/sitong-chen-4b7300336/" target="_blank" rel="noopener">linkedin.com/in/sitong-chen</a>');break;
+      case 'GITHUB':print(line,'<a href="https://github.com/SC0K" target="_blank" rel="noopener">github.com/SC0K</a>');break;
+      case 'EXIT':print(line,'There is no exit. Thanks for visiting.');break;
+      default:print(line,'Bad command or file name');
+    }
+  }
+  cli.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){var v=cli.value;if(v.trim())hist.push(v);hi=hist.length;cli.value='';size();run(v);cli.scrollIntoView({block:'nearest'});}
+    else if(e.key==='ArrowUp'&&hist.length){hi=Math.max(0,hi-1);cli.value=hist[hi];size();e.preventDefault();}
+    else if(e.key==='ArrowDown'&&hist.length){hi=Math.min(hist.length,hi+1);cli.value=hist[hi]||'';size();e.preventDefault();}
+  });
+  function size(){cli.style.flex='none';cli.style.width=(cli.value.length+1.4)+'ch'}
+  cli.addEventListener('input',size);size();
+  document.getElementById('promptline').addEventListener('click',function(){cli.focus()});
+  document.getElementById('f1').onclick=function(){run('HELP');cli.focus()};
+  document.addEventListener('keydown',function(e){if(e.key==='F1'){e.preventDefault();run('HELP');cli.focus()}});
+  document.querySelectorAll('[data-abs]').forEach(function(b){b.onclick=function(){var p=document.getElementById(b.dataset.abs);p.hidden=!p.hidden;b.setAttribute('aria-expanded',!p.hidden)}});
+  var clock=document.getElementById('clock');function tick(){clock.textContent=new Date().toLocaleTimeString('en-GB')}tick();setInterval(tick,1000);
+  var cp=document.getElementById('copy'),em=document.getElementById('email');
+  cp.onclick=function(){function sel(){var r=document.createRange();r.selectNodeContents(em);var s=getSelection();s.removeAllRanges();s.addRange(r);cp.textContent='[SELECTED]'}
+    try{navigator.clipboard.writeText(em.textContent).then(function(){cp.textContent='[COPIED]'},sel)}catch(x){sel()}setTimeout(function(){cp.textContent='[COPY]'},1800)};
+})();
+</script>
+</body>
+</html>
