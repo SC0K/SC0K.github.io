@@ -171,7 +171,7 @@ section ~ section > .cmd:first-child{margin-top:22px}
 
 <nav class="menubar" aria-label="Sections"><div class="in">
   <span class="logo">SITONG.EXE</span>
-  <a href="#about"><b>A</b>bout</a><a href="#news"><b>N</b>ews</a><a href="#pubs"><b>P</b>ublications</a><a href="#projects">Pro<b>j</b>ects</a><a href="#contact"><b>C</b>ontact</a>
+  <a href="#about"><b>A</b>bout</a><a href="#news"><b>N</b>ews</a><a href="#PUBLICATIONS"><b>P</b>ublications</a><a href="#projects">Pro<b>j</b>ects</a><a href="#contact"><b>C</b>ontact</a>
 </div></nav>
 
 <div class="screen"><main class="term" id="term">
@@ -211,7 +211,7 @@ Starting SC-DOS...</div>
   </div>
 </section>
 
-<section id="pubs">
+<section id="PUBLICATIONS">
   <div class="cmd"><span class="pr">C:\SITONG&gt;</span>DIR PUBLICATIONS</div>
   <div class="out publist">
     <div class="pubrow">
@@ -270,8 +270,8 @@ Starting SC-DOS...</div>
 (function(){
   var cli=document.getElementById('cli'),reply=document.getElementById('reply');
   var hist=[],hi=0;
-  var sections={ABOUT:'about',README:'about',NEWS:'news',PUBS:'pubs',PUBLICATIONS:'pubs',KINO:'pubs',PROJECTS:'projects',CONTACT:'contact'};
-  var files={'README.TXT':'about','NEWS.TXT':'news','PUBS':'pubs','PROJECTS':'projects'};
+  var sections={ABOUT:'about',README:'about',NEWS:'news',PUBLICATIONS:'PUBLICATIONS',PUBLICATIONS:'PUBLICATIONS',KINO:'PUBLICATIONS',PROJECTS:'projects',CONTACT:'contact'};
+  var files={'README.TXT':'about','NEWS.TXT':'news','PUBLICATIONS':'PUBLICATIONS','PROJECTS':'projects'};
   function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
   function print(cmd,html){reply.insertAdjacentHTML('beforeend','<div class="cmd"><span class="pr">C:\\SITONG&gt;</span>'+esc(cmd)+'</div>'+(html?'<div class="out">'+html+'</div>':''));}
   function show(id){
@@ -287,7 +287,7 @@ Starting SC-DOS...</div>
     if(sections[c]){print(line,'');show(sections[c]);return}
     switch(c){
       case 'HELP':case '?':print(line,
-'Commands:\n  <span class="hi">ABOUT</span>      who I am         <span class="hi">NEWS</span>       latest news\n  <span class="hi">PUBS</span>       publications     <span class="hi">PROJECTS</span>   projects\n  <span class="hi">CONTACT</span>    get in touch     <span class="hi">DIR</span>        list files\n  <span class="hi">VER</span>        version          <span class="hi">CLS</span>        clear screen');break;
+'Commands:\n  <span class="hi">ABOUT</span>      who I am         <span class="hi">NEWS</span>       latest news\n  <span class="hi">PUBLICATIONS</span>       publications     <span class="hi">PROJECTS</span>   projects\n  <span class="hi">CONTACT</span>    get in touch     <span class="hi">DIR</span>        list files\n  <span class="hi">VER</span>        version          <span class="hi">CLS</span>        clear screen');break;
       case 'DIR':print(line,' Volume in drive C is SITONG\n Directory of C:\\SITONG\n\n'+Object.keys(files).map(function(f){var p=f.split('.');return (p[0]+'         ').slice(0,9)+(p[1]?p[1]:'&lt;DIR&gt;')}).join('\n')+'\n        '+Object.keys(files).length+' file(s)');break;
       case 'VER':print(line,'SC-DOS Version 26.11');break;
       case 'DATE':case 'TIME':print(line,'Current '+(c==='DATE'?'date':'time')+' is '+(c==='DATE'?new Date().toLocaleDateString('en-GB'):new Date().toLocaleTimeString('en-GB')));break;
